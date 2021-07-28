@@ -1,0 +1,88 @@
+{
+  "name": "ED_cnv_calling_v1.0.0",
+  "title": "ED_cnv_calling_v1.0.0",
+  "summary": "v1.0.0 - Performs CNV calling using ExomeDepth",
+  "dxapi": "1.0.0",
+  "inputSpec": [
+    {
+      "name": "project_name",
+      "label": "project_name",
+      "help": "The project containing the bamfiles.",
+      "class": "string"
+    },
+    {
+      "name": "reference_genome",
+      "label": "fasta file",
+      "help": "reference_genome",
+      "class": "file",
+      "patterns": ["*"],
+      "optional": false
+    },
+    {
+      "name": "readcount_file",
+      "label": "readcount.Rdata",
+      "help": "readcount file",
+      "class": "file",
+      "patterns": ["*"],
+      "optional": false
+    },
+    {
+      "name": "QC_file",
+      "label": "QC_file",
+      "help": "QC metrics specific for each panel",
+      "class": "file",
+      "patterns": ["*"],
+      "optional": true
+    },
+    {
+      "name": "bamfile_pannumbers",
+      "label": "bamfile_pannumbers",
+      "help": "comma separated string on pan numbers found within the BAM file name",
+      "class": "string"
+    },
+    {
+      "name": "subpanel_bed",
+      "label": "Exomedepth BED file",
+      "help": "BED file used to call variants",
+      "class": "file",
+      "patterns": ["*.bed"],
+      "optional": false
+    }
+  ],
+  "outputSpec": [
+    {
+      "name": "exomedepth_output",
+      "label": "exomedepth output",
+      "help": "PDF output from ExomeDepth.",
+      "class": "array:file"
+    }
+  ],
+  "runSpec": {
+    "interpreter": "bash",
+    "timeoutPolicy": {
+      "*": {
+        "hours": 48
+      }
+    },
+    "distribution": "Ubuntu",
+    "release": "16.04",
+    "version": "1",
+    "file": "src/code.sh"
+  },
+  "access": {
+    "network": [
+      "*"
+    ],
+    "allProjects": "VIEW"
+  },
+  "ignoreReuse": false,
+  "regionalOptions": {
+    "aws:us-east-1": {
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem1_ssd1_v2_x4"
+        }
+      }
+    }
+  }
+}
