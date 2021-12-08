@@ -31,7 +31,7 @@
       "label": "QC_file",
       "help": "QC metrics specific for each panel",
       "class": "file",
-      "patterns": ["*"],
+      "patterns": ["*.RData"],
       "optional": true
     },
     {

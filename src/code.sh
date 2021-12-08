@@ -1,9 +1,6 @@
 #!/bin/bash
 # exomedepth_cnv_analysis_v1.0.0
 
-#!/bin/bash
-#
-
 # The following line causes bash to exit at any point if there is any error
 # and to output each line as it is executed -- useful for debugging
 set -e -x -o pipefail
