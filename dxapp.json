@@ -15,7 +15,7 @@
       "label": "fasta file",
       "help": "reference_genome",
       "class": "file",
-      "patterns": ["*"],
+      "patterns": ["*.fa"],
       "optional": false
     },
     {
@@ -23,7 +23,7 @@
       "label": "readcount.Rdata",
       "help": "readcount file",
       "class": "file",
-      "patterns": ["*"],
+      "patterns": ["*.RData"],
       "optional": false
     },
     {
