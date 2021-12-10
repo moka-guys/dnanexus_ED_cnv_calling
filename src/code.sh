@@ -17,7 +17,6 @@ mkdir -p /home/dnanexus/out/exomedepth_output/exomedepth_output/
 # make folder to hold downloaded files
 mkdir to_test
 
-#
 # Download inputs
 # download all inputs
 dx-download-all-inputs --parallel
