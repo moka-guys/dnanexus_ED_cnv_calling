@@ -19,8 +19,7 @@ mkdir to_test
 
 # Download inputs
 dx-download-all-inputs --parallel
-#
-#dx download "$bedfile"
+
 
 # make and cd to test dir
 cd to_test
