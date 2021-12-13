@@ -18,7 +18,6 @@ mkdir -p /home/dnanexus/out/exomedepth_output/exomedepth_output/
 mkdir to_test
 
 # Download inputs
-# download all inputs
 dx-download-all-inputs --parallel
 #
 #dx download "$bedfile"
