@@ -68,9 +68,6 @@ mark-section "Run CNV analysis using docker image"
 #Get read count for all samples
 docker load -i '/home/dnanexus/seglh_exomedepth_1220d31.tgz'
 
-#Run command below to create panel of normals
-#docker run -v /home/dnanexus:/home/dnanexus seglh/exomedepth:5f792cb readCount.R /home/dnanexus/out/exomedepth_output/exomedepth_output/$bedfile_prefix/normals.RData $reference_genome_path $bedfile_path $bam_list
-
 for bam in /home/dnanexus/to_test/*bam
 do
 samplename=$(python -c "basename='$bam'; print basename.split('/')[4].split('_R1')[0]")
