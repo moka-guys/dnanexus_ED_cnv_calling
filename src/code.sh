@@ -6,8 +6,8 @@
 set -e -x -o pipefail
 
 ### Set up parameters
-# split project name to get the NGS run number
-run=${project_name##*_}
+# split project name to get the NGS run number(s)
+run=${echo $project_name |  sed -n 's/^.*_\(NGS.*\)\.*/\1/p'} # Variable not currently
 
 #read the DNA Nexus api key as a variable
 API_KEY=$(dx cat project-FQqXfYQ0Z0gqx7XG9Z2b4K43:mokaguys_nexus_auth_key)
@@ -20,8 +20,7 @@ mkdir to_test
 # Download inputs
 dx-download-all-inputs --parallel
 
-
-# make and cd to test dir
+# cd to test dir
 cd to_test
 
 mark-section "determine run specific variables"
@@ -47,8 +46,6 @@ bam_list=""
 bam_list="$(ls /home/dnanexus/to_test/*bam | tr '\n' ' ')"
 echo "bam list = " $bam_list
 
-
-echo $ED_docker
 #count the files. make sure there are at least 3 samples for this pan number, else stop
 filecount="$(ls *001.ba* | grep . -c)"
 if (( $filecount < 6 )); then
@@ -60,16 +57,18 @@ fi
 cd ..
 
 mark-section "setting up Exomedepth docker image"
-# docker load
-#docker load -i $ED_docker
+# download the docker file from 001_Tools...
+dx download project-ByfFPz00jy1fk6PjpZ95F27J:file-G6kfZYQ0jy1vZ0BF33KZpQjJ --auth "${API_KEY}"
 
 mark-section "Run CNV analysis using docker image"
 # docker run - mount the home directory as a share
 # Write log direct into output folder
 #Get read count for all samples
-docker load -i '/home/dnanexus/seglh_exomedepth.tgz'
+docker load -i '/home/dnanexus/seglh_exomedepth_1220d31.tgz'
+
 #Run command below to create panel of normals
 #docker run -v /home/dnanexus:/home/dnanexus seglh/exomedepth:5f792cb readCount.R /home/dnanexus/out/exomedepth_output/exomedepth_output/$bedfile_prefix/normals.RData $reference_genome_path $bedfile_path $bam_list
+
 for bam in /home/dnanexus/to_test/*bam
 do
 samplename=$(python -c "basename='$bam'; print basename.split('/')[4].split('_R1')[0]")
