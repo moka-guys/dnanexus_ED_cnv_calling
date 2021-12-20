@@ -7,7 +7,9 @@ set -e -x -o pipefail
 
 ### Set up parameters
 # split project name to get the NGS run number(s)
-run=${echo $project_name |  sed -n 's/^.*_\(NGS.*\)\.*/\1/p'} # Variable not currently
+run=${echo $project_name |  sed -n 's/^.*_\(NGS.*\)\.*/\1/p'} # Variable not currently used
+
+docker_file=project-ByfFPz00jy1fk6PjpZ95F27J:file-G6kfZYQ0jy1vZ0BF33KZpQjJ
 
 #read the DNA Nexus api key as a variable
 API_KEY=$(dx cat project-FQqXfYQ0Z0gqx7XG9Z2b4K43:mokaguys_nexus_auth_key)
@@ -58,7 +60,7 @@ cd ..
 
 mark-section "setting up Exomedepth docker image"
 # download the docker file from 001_Tools...
-dx download project-ByfFPz00jy1fk6PjpZ95F27J:file-G6kfZYQ0jy1vZ0BF33KZpQjJ --auth "${API_KEY}"
+dx download $docker_file --auth "${API_KEY}"
 
 mark-section "Run CNV analysis using docker image"
 # docker run - mount the home directory as a share
