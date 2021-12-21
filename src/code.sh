@@ -6,9 +6,14 @@
 set -e -x -o pipefail
 
 ### Set up parameters
+#TODO Check if still needed
 # split project name to get the NGS run number(s)
 run=${echo $project_name |  sed -n 's/^.*_\(NGS.*\)\.*/\1/p'} # Variable not currently used
 
+# Add this if still required
+subpanel_bed_prefix=TODO 
+
+# Location of the ExomeDepth docker file
 docker_file=project-ByfFPz00jy1fk6PjpZ95F27J:file-G6kfZYQ0jy1vZ0BF33KZpQjJ
 
 #read the DNA Nexus api key as a variable
@@ -28,8 +33,9 @@ cd to_test
 mark-section "determine run specific variables"
 echo "sub_panel_BED = " $subpanel_bed
 echo "reference_genome = " $reference_genome
-echo "panel = " $bamfile_pannumbers
+echo "All Pan numbers to be assessed using this BED file = " $bamfile_pannumbers
 echo "QC_file = " $QC_file
+
 # $bamfile_pannumbers is a comma seperated list of pannumbers that should be analysed together.
 # split this into an array and loop through to download BAM and BAI files
 IFS=',' read -ra pannum_array <<<  $bamfile_pannumbers
@@ -45,9 +51,12 @@ done
 
 #Get list of all BAMs 
 bam_list=""
-bam_list="$(ls /home/dnanexus/to_test/*bam | tr '\n' ' ')"
-echo "bam list = " $bam_list
+bam_list=(ls /home/dnanexus/to_test/*bam)
+echo "bam list = " "${bam_list[@]}"
 
+
+
+#TODO Check if still needed
 #count the files. make sure there are at least 3 samples for this pan number, else stop
 filecount="$(ls *001.ba* | grep . -c)"
 if (( $filecount < 6 )); then
@@ -69,11 +78,12 @@ mark-section "Run CNV analysis using docker image"
 docker load -i '/home/dnanexus/seglh_exomedepth_1220d31.tgz'
 
 for bam in /home/dnanexus/to_test/*bam
-do
+#TODO Clean up generation of sample name
 samplename=$(python -c "basename='$bam'; print basename.split('/')[4].split('_R1')[0]")
 echo "samplename:"$samplename
 echo "bam:"$bam
 #for each bam run exomedepth
+# TODO rewrite command and add comment
 docker run -v /home/dnanexus:/home/dnanexus seglh/exomedepth:5f792cb exomeDepth.R 'v1.0.0' /home/dnanexus/out/exomedepth_output/exomedepth_output/"$samplename"_output.pdf $subpanel_bed_path:$subpanel_bed_prefix $readcount_file_path $bam:$samplename $QC_file_path
 done
 
