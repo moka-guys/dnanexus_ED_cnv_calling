@@ -1,5 +1,10 @@
-# dnanexus_ED_cnv_calling
+# dnanexus_ED_cnv_analysis_v1.0.0
 Performs CNV calling using ExomeDepth.
+
+Exome depth is run in two stages. Firstly, read counts are calculated, before CNVs are called using the read counts. Read counts are calculated over the entire genome whereas the CNV calling can be performed using a subpanel.
+
+# What does the app do?
+This app runs the CNV calling stage.
 
 # How the app works?
 
