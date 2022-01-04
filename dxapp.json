@@ -15,7 +15,7 @@
       "label": "fasta file",
       "help": "reference_genome",
       "class": "file",
-      "patterns": ["*.fa"],
+      "patterns": ["*.fa", "*.fasta"],
       "optional": false
     },
     {
