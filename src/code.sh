@@ -62,10 +62,18 @@ done
 bam_list=(/home/dnanexus/to_test/*bam)
 echo "bam list = " "${bam_list[@]}"
 
-#count the files. make sure there are at least 3 samples for this pan number as this is a requirement of the dockerised R script, else stop
-filecount="$(ls *001.ba* | grep . -c)"
-if (( $filecount < 6 )); then
+#count the files. Make sure there are at least 3 samples for this pan number as this is a requirement of the dockerised R script, else stop
+bamfilecount=$(find . -maxdepth 1 -name "*001.bam"  | wc -l)
+baifilecount=$(find . -maxdepth 1 -name "*001.bai"  | wc -l)
+
+if (( bamfilecount < 30 )); then
 	echo "LESS THAN THREE BAM FILES FOUND FOR THIS ANALYSIS" 1>&2
+	exit 1
+fi
+
+# Ensure that every bam file has a bai file
+if (( baifilecount < bamfilecount )); then
+	echo "ONE OR MORE BAM FILE IS MISSING AN BAI INDEX FILE" 1>&2
 	exit 1
 fi
 
