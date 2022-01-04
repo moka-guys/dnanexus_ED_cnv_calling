@@ -42,7 +42,7 @@ echo "All Pan numbers to be assessed using this BED file = " "$bamfile_pannumber
 mark-section "Check that there are bam files matching provided Pan numbers"
 
 # Create an array of all the Pan numbers from the bam files in the provided project
-readarray -t pans_from_bams < <(dx find data --name "*.bam" --project "$project_name" --folder /output --auth "$API_KEY" |  sed -n 's/^.*_Pan\([0-9]*\)\_.*/\1/p' | sort | uniq)
+readarray -t pans_from_bams < <(dx find data --name "*.bam" --project "$project_name" --folder /output --auth "$API_KEY" |  sed -n 's/^.*_\(Pan[0-9]*\)\_.*/\1/p' | sort | uniq)
 
 mark-section "download bams files and indexes"
 # $bamfile_pannumbers is a comma seperated list of pannumbers that should be analysed together.
@@ -66,7 +66,7 @@ echo "bam list = " "${bam_list[@]}"
 bamfilecount=$(find . -maxdepth 1 -name "*001.bam"  | wc -l)
 baifilecount=$(find . -maxdepth 1 -name "*001.bai"  | wc -l)
 
-if (( bamfilecount < 30 )); then
+if (( bamfilecount < 3 )); then
 	echo "LESS THAN THREE BAM FILES FOUND FOR THIS ANALYSIS" 1>&2
 	exit 1
 fi
