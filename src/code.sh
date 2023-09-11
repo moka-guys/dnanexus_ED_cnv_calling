@@ -1,5 +1,5 @@
 #!/bin/bash
-# exomedepth_cnv_analysis_v1.0.0
+# exomedepth_cnv_analysis_v1.1.0
 
 # The following line causes bash to exit at any point if there is any error
 # and to output each line as it is executed -- useful for debugging
@@ -16,7 +16,7 @@ readcount_file_name=$(dx describe --name "$readcount_file")
 subpanel_bed_prefix=$(echo "$subpanel_bed_name" | sed -r  's/^[^0-9]*(Pan[0-9]+).*/\1/')
 
 # Location of the ExomeDepth docker file
-docker_file=project-ByfFPz00jy1fk6PjpZ95F27J:file-G6kfZYQ0jy1vZ0BF33KZpQjJ
+docker_file=project-ByfFPz00jy1fk6PjpZ95F27J:file-GYzKz400jy1yx101F34p8qj2
 
 #read the DNA Nexus api key as a variable
 API_KEY=$(dx cat project-FQqXfYQ0Z0gqx7XG9Z2b4K43:mokaguys_nexus_auth_key)
@@ -81,7 +81,7 @@ cd ..
 mark-section "setting up Exomedepth docker image"
 # download the docker file from 001_Tools...
 dx download $docker_file --auth "${API_KEY}"
-docker load -i '/home/dnanexus/seglh_exomedepth_1220d31.tgz'
+docker load -i '/home/dnanexus/seglh_exomedepth_87fa493.tgz'
 
 mark-section "Run CNV analysis using docker image"
 
@@ -95,26 +95,33 @@ do
 samplename=$(basename "$bam" _R1_001.bam) 
 echo "samplename:" "$samplename"
 echo "bam:" "$bam"
-echo "subpanel:" "$subpanel_bed_name" 
+echo "subpanel:" "$subpanel_bed_name"
+echo "trans_prob:" "$trans_prob"
 
-# Handle optional argument relating to QC file
-if [ -z "$QC_file" ]; then
-	echo "Optional QC file not provided by user"
-	bam_and_QC_command="$bam":"$samplename"
-	else
-	QC_file_path="/home/dnanexus/in/QC_file/*.RData"
-	bam_and_QC_command="$bam:$samplename $QC_file_path"
+# Check which QC file to you
+#Extract panel type from samplename
+#split samplename on '_'
+panelname="$(echo $samplename | cut -d'_' -f6)"
+echo $panelname
+if [[ "$panelname" == *VCP1* ]]; then 
+	QC_file="vcp1_qc.RData";
+elif [[ "$panelname" == *VCP2* ]]; then
+	QC_file="vcp2_qc.RData";
+elif [[ "$panelname" == *VCP3* ]]; then
+	QC_file="vcp3_qc.RData";
 fi
 
+#test
+echo "RDATA = " "$readcount_file_name"
 #for each bam run exomedepth - the string in the format v1.0.0 will be concatenated to the ouput as the app version
 docker run -v /home/dnanexus:/home/dnanexus/ \
-	--rm  seglh/exomedepth:1220d31 \
+	--rm  seglh/exomedepth:87fa493 \
 	exomeDepth.R \
-	'v1.0.0' \
+	'v1.1.0' \
 	/home/dnanexus/out/exomedepth_output/exomedepth_output/"$samplename"_output.pdf \
 	/home/dnanexus/in/subpanel_bed/"$subpanel_bed_name":"$subpanel_bed_prefix" \
-	/home/dnanexus/in/readcount_file/"$readcount_file_name" \
-	"$bam_and_QC_command"
+	/home/dnanexus/in/readcount_file/"$readcount_file_name" "$bam":"$samplename":0.01 $QC_file
+
 done
 
 # Upload results
