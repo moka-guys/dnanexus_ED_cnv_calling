@@ -1,7 +1,7 @@
 {
-  "name": "ED_cnv_calling_v1.1.0",
-  "title": "ED_cnv_calling_v1.1.0",
-  "summary": "v1.1.0 - Performs CNV calling using ExomeDepth",
+  "name": "ED_cnv_calling_v1.2.0",
+  "title": "ED_cnv_calling_v1.2.0",
+  "summary": "v1.2.0 - Performs CNV calling using ExomeDepth",
   "dxapi": "1.0.0",
   "inputSpec": [
     {
