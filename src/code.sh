@@ -1,5 +1,5 @@
 #!/bin/bash
-# exomedepth_cnv_analysis_v1.2.0
+# exomedepth_cnv_analysis_v1.3.0
 
 # The following line causes bash to exit at any point if there is any error
 # and to output each line as it is executed -- useful for debugging
@@ -16,7 +16,7 @@ readcount_file_name=$(dx describe --name "$readcount_file")
 subpanel_bed_prefix=$(echo "$subpanel_bed_name" | sed -r  's/^[^0-9]*(Pan[0-9]+).*/\1/')
 
 # Location of the ExomeDepth docker file
-docker_file_id=project-ByfFPz00jy1fk6PjpZ95F27J:file-GYzKz400jy1yx101F34p8qj2
+docker_file_id=project-ByfFPz00jy1fk6PjpZ95F27J:file-Gbjy9yj0JQXkKB8bfFz856V6
 
 #read the DNA Nexus api key as a variable
 API_KEY_wquotes=$(echo $DX_SECURITY_CONTEXT |  jq '.auth_token')
@@ -114,7 +114,7 @@ echo "RDATA = " "$readcount_file_name"
 docker run -v /home/dnanexus:/home/dnanexus/ \
 	--rm  ${DOCKERIMAGENAME} \
 	exomeDepth.R \
-	'v1.2.0' \
+	'v1.3.0' \
 	/home/dnanexus/out/exomedepth_output/exomedepth_output/"$samplename"_output.pdf \
 	/home/dnanexus/in/subpanel_bed/"$subpanel_bed_name":"$subpanel_bed_prefix" \
 	/home/dnanexus/in/readcount_file/"$readcount_file_name" "$bam":"$samplename":0.01 $QC_file
