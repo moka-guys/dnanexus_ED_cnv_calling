@@ -1,5 +1,5 @@
 #!/bin/bash
-# exomedepth_cnv_analysis_v1.1.0
+# exomedepth_cnv_analysis_v1.3.0
 
 # The following line causes bash to exit at any point if there is any error
 # and to output each line as it is executed -- useful for debugging
@@ -16,10 +16,12 @@ readcount_file_name=$(dx describe --name "$readcount_file")
 subpanel_bed_prefix=$(echo "$subpanel_bed_name" | sed -r  's/^[^0-9]*(Pan[0-9]+).*/\1/')
 
 # Location of the ExomeDepth docker file
-docker_file=project-ByfFPz00jy1fk6PjpZ95F27J:file-GYzKz400jy1yx101F34p8qj2
+docker_file_id=project-ByfFPz00jy1fk6PjpZ95F27J:file-Gbjy9yj0JQXkKB8bfFz856V6
 
 #read the DNA Nexus api key as a variable
-API_KEY=$(dx cat project-FQqXfYQ0Z0gqx7XG9Z2b4K43:mokaguys_nexus_auth_key)
+API_KEY_wquotes=$(echo $DX_SECURITY_CONTEXT |  jq '.auth_token')
+API_KEY=$(echo "$API_KEY_wquotes" | sed 's/"//g')
+echo "$API_KEY"
 
 #make output dir
 mkdir -p /home/dnanexus/out/exomedepth_output/exomedepth_output/
@@ -61,13 +63,6 @@ done
 bam_list=(/home/dnanexus/to_test/*bam)
 echo "bam list = " "${bam_list[@]}"
 
-#count the files. Make sure there are at least 3 samples for this pan number as this is a requirement of the dockerised R script, else stop
-bamfilecount=$(find . -maxdepth 1 -name "*001.bam"  | wc -l)
-if (( bamfilecount < 3 )); then
-	echo "LESS THAN THREE BAM FILES FOUND FOR THIS ANALYSIS" 1>&2
-	exit 1
-fi
-
 # Ensure that every bam file has a bai file
 baifilecount=$(find . -maxdepth 1 -name "*001.bai"  | wc -l)
 if (( baifilecount < bamfilecount )); then
@@ -80,8 +75,10 @@ cd ..
 
 mark-section "setting up Exomedepth docker image"
 # download the docker file from 001_Tools...
-dx download $docker_file --auth "${API_KEY}"
-docker load -i '/home/dnanexus/seglh_exomedepth_87fa493.tgz'
+dx download $docker_file_id --auth "${API_KEY}"
+docker_file=$(dx describe ${docker_file_id} --name)
+DOCKERIMAGENAME=`tar xfO ${docker_file} manifest.json | sed -E 's/.*"RepoTags":\["?([^"]*)"?.*/\1/'`
+docker load < /home/dnanexus/"${docker_file}"
 
 mark-section "Run CNV analysis using docker image"
 
@@ -115,9 +112,9 @@ fi
 echo "RDATA = " "$readcount_file_name"
 #for each bam run exomedepth - the string in the format v1.0.0 will be concatenated to the ouput as the app version
 docker run -v /home/dnanexus:/home/dnanexus/ \
-	--rm  seglh/exomedepth:87fa493 \
+	--rm  ${DOCKERIMAGENAME} \
 	exomeDepth.R \
-	'v1.1.0' \
+	'v1.3.0' \
 	/home/dnanexus/out/exomedepth_output/exomedepth_output/"$samplename"_output.pdf \
 	/home/dnanexus/in/subpanel_bed/"$subpanel_bed_name":"$subpanel_bed_prefix" \
 	/home/dnanexus/in/readcount_file/"$readcount_file_name" "$bam":"$samplename":0.01 $QC_file
