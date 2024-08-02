@@ -1,4 +1,4 @@
-# dnanexus_ED_cnv_analysis_v1.3.0
+# dnanexus_ED_cnv_analysis_v1.3.1
 Performs CNV calling using ExomeDepth.
 
 Exome depth is run in two stages. Firstly, read counts are calculated, before CNVs are called using the read counts. Read counts are calculated over the entire genome whereas the CNV calling can be performed using a subpanel.
@@ -19,6 +19,7 @@ For further details on the usage of the docker image please refer to https://git
 - Readcount file generated using https://github.com/moka-guys/dnanexus\_ED\_readcount_analysis
 - List of comma seperated pan numbers (Pan4127,Pan4129,Pan4130,Pan4049)
 - Test specific BED file
+- reference genome file (hs37d5.fa.gz)
 Note: Transitional probability is set to 0.01, the default value is 0.001 (too many false positives during testing).
 See CLI command below for an example of inputs.
 
@@ -27,14 +28,15 @@ See CLI command below for an example of inputs.
 - output.tex - Intermediate file used to create PDF
 - tables-1.pdf, tables-2.pdf etc - Plots for inclusion in the generated reports
 - output.bed - CNVs in BED format (whole panel)
-- output.RData 
+- output.RData
+- output.vcf
 
 # Running from the CLI:
 
 The app can be run from the dx CLI.  The example below shows the code used to run test samples through this app:
 
 ```bash
-dx run project-G0pKxX80pgqFk9Vy8p6vQbKv:applet-G7B5Zxj0pgq9Q8JfP0jpY3y4 -iproject_name=003_220103_exomeDepth_calling_test -ireadcount_file=project-G6jb1k807Xjj1J984K6kfP13:file-G6kg5q80gvvz37qZ4ZPbvZ8Q -ibamfile_pannumbers=Pan4127,Pan4129,Pan4130,Pan4049 -isubpanel_bed=project-ByfFPz00jy1fk6PjpZ95F27J:file-G6kZpqQ0jy1q1Zk94G3qbVyV 
+dx run project-G0pKxX80pgqFk9Vy8p6vQbKv:applet-G7B5Zxj0pgq9Q8JfP0jpY3y4 -iproject_name=003_220103_exomeDepth_calling_test -ireadcount_file=project-G6jb1k807Xjj1J984K6kfP13:file-G6kg5q80gvvz37qZ4ZPbvZ8Q -ibamfile_pannumbers=Pan4127,Pan4129,Pan4130,Pan4049 -isubpanel_bed=project-ByfFPz00jy1fk6PjpZ95F27J:file-G6kZpqQ0jy1q1Zk94G3qbVyV -ireference_genome=project-ByfFPz00jy1fk6PjpZ95F27J:file-B6ZY7VG2J35Vfvpkj8y0KZ01
 ```
 # Debugging
 
