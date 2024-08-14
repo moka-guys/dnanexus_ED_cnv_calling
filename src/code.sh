@@ -1,5 +1,5 @@
 #!/bin/bash
-# exomedepth_cnv_analysis_v1.3.0
+# exomedepth_cnv_analysis_v1.3.1
 
 # The following line causes bash to exit at any point if there is any error
 # and to output each line as it is executed -- useful for debugging
@@ -50,10 +50,17 @@ mark-section "download bams files and indexes"
 # split this into an array and loop through to download BAM and BAI files
 IFS=',' read -ra pannum_array <<<  $bamfile_pannumbers
 for panel in "${pannum_array[@]}"; do
- 	
-if [[ " ${pans_from_bams[*]} " =~ " ${panel} " ]]; then
-    # If requested pan number has matching bam files
+
+if [[ " ${pans_from_bams[*]} " =~ " ${panel} " ]] && [[ ! "$included_samples" ]]; then
+    # If requested pan number has matching bam files and included_samples is not provided
 	dx download "$project_name":output/*"$panel"*001.ba* --auth "$API_KEY"
+elif [[ " ${pans_from_bams[*]} " =~ " ${panel} " ]] && [[ "$included_samples" ]]; then
+    # If requested pan number has matching bam files and included_samples is provided
+	IFS=',' read -ra included_samples_array <<<  $included_samples
+	for sample in ${included_samples_array[@]}
+	do  
+	    dx download "$project_name":output/"$sample"*"$panel"*001.ba* --auth "$API_KEY"
+	done
 else
     echo "WARNING: No bam/bai files found for ${panel}"
 fi
@@ -114,7 +121,7 @@ echo "RDATA = " "$readcount_file_name"
 docker run -v /home/dnanexus:/home/dnanexus/ \
 	--rm  ${DOCKERIMAGENAME} \
 	exomeDepth.R \
-	'v1.3.0' \
+	'v1.3.1' \
 	/home/dnanexus/out/exomedepth_output/exomedepth_output/"$samplename"_output.pdf \
 	/home/dnanexus/in/subpanel_bed/"$subpanel_bed_name":"$subpanel_bed_prefix" \
 	/home/dnanexus/in/readcount_file/"$readcount_file_name" "$bam":"$samplename":0.01 $QC_file
