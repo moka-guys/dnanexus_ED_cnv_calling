@@ -50,7 +50,6 @@ mark-section "download bams files and indexes"
 # split this into an array and loop through to download BAM and BAI files
 IFS=',' read -ra pannum_array <<<  $bamfile_pannumbers
 for panel in "${pannum_array[@]}"; do
-
 if [[ " ${pans_from_bams[*]} " =~ " ${panel} " ]] && [[ ! "$included_samples" ]]; then
     # If requested pan number has matching bam files and included_samples is not provided
 	dx download "$project_name":output/*"$panel"*001.ba* --auth "$API_KEY"

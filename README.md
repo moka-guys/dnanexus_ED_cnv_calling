@@ -19,7 +19,7 @@ For further details on the usage of the docker image please refer to https://git
 - Readcount file generated using https://github.com/moka-guys/dnanexus\_ED\_readcount_analysis
 - List of comma seperated pan numbers (Pan4127,Pan4129,Pan4130,Pan4049)
 - Test specific BED file
-- Optional: list of comma separated samples if want to run specific a specific sample or a list of samples only (e.g. NGS629_01_136819,NGS629_02_136819)
+- Optional: list of comma separated samples if want to run a specific sample or a list of samples only (e.g. NGS629_01_136819,NGS629_02_136819)
 Note: Transitional probability is set to 0.01, the default value is 0.001 (too many false positives during testing).
 See CLI command below for an example of inputs.
 
