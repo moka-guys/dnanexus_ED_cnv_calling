@@ -1,5 +1,5 @@
 #!/bin/bash
-# exomedepth_cnv_analysis_v1.3.0
+# exomedepth_cnv_analysis_v1.3.1
 
 # The following line causes bash to exit at any point if there is any error
 # and to output each line as it is executed -- useful for debugging
@@ -30,6 +30,20 @@ mkdir to_test
 
 # Download inputs
 dx-download-all-inputs --parallel
+
+mark-section "Determining reference genome"
+if  [[ $reference_genome_name == *.tar* ]]
+	then
+		echo "reference is tarball"
+		exit 1
+elif [[ $reference_genome_name == *.gz ]]
+	then 
+		gunzip $reference_genome_path
+		reference_fasta=$(echo $reference_genome_path | sed 's/\.gz//g')
+elif [[ $reference_genome_name == *.fa ]]
+	then
+		reference_fasta=$reference_genome_path
+fi 
 
 # cd to test dir
 cd to_test
@@ -114,7 +128,7 @@ echo "RDATA = " "$readcount_file_name"
 docker run -v /home/dnanexus:/home/dnanexus/ \
 	--rm  ${DOCKERIMAGENAME} \
 	exomeDepth.R \
-	'v1.3.0' \
+	'v1.3.1' \
 	/home/dnanexus/out/exomedepth_output/exomedepth_output/"$samplename"_output.pdf \
 	/home/dnanexus/in/subpanel_bed/"$subpanel_bed_name":"$subpanel_bed_prefix" \
 	/home/dnanexus/in/readcount_file/"$readcount_file_name" "$bam":"$samplename":0.01 $QC_file
