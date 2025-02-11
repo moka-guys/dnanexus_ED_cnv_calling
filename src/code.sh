@@ -1,5 +1,5 @@
 #!/bin/bash
-# exomedepth_cnv_analysis_v1.3.1
+# exomedepth_cnv_analysis_v1.4.0
 
 # The following line causes bash to exit at any point if there is any error
 # and to output each line as it is executed -- useful for debugging
@@ -67,7 +67,7 @@ for panel in "${pannum_array[@]}"; do
  	
 if [[ " ${pans_from_bams[*]} " =~ " ${panel} " ]]; then
     # If requested pan number has matching bam files
-	dx download "$project_name":output/*"$panel"*001.ba* --auth "$API_KEY"
+	dx download "$project_name":output/*"$panel"*$bam_str.ba* --auth "$API_KEY"
 else
     echo "WARNING: No bam/bai files found for ${panel}"
 fi
@@ -78,7 +78,7 @@ bam_list=(/home/dnanexus/to_test/*bam)
 echo "bam list = " "${bam_list[@]}"
 
 # Ensure that every bam file has a bai file
-baifilecount=$(find . -maxdepth 1 -name "*001.bai"  | wc -l)
+baifilecount=$(find . -maxdepth 1 -name "*$bam_str*.bai"  | wc -l)
 if (( baifilecount < bamfilecount )); then
 	echo "ONE OR MORE BAM FILE IS MISSING A BAI INDEX FILE" 1>&2
 	exit 1
@@ -103,7 +103,7 @@ mark-section "Run CNV analysis using docker image"
 
 for bam in /home/dnanexus/to_test/*bam
 do
-samplename=$(basename "$bam" _R1_001.bam) 
+samplename=$(basename "$bam" $samplename_str) 
 echo "samplename:" "$samplename"
 echo "bam:" "$bam"
 echo "subpanel:" "$subpanel_bed_name"
@@ -118,7 +118,8 @@ if [[ "$panelname" == *VCP1* ]]; then
 	QC_file="vcp1_qc.RData";
 elif [[ "$panelname" == *VCP2* ]]; then
 	QC_file="vcp2_qc.RData";
-elif [[ "$panelname" == *VCP3* ]]; then
+elif [[ "$panelname" == *VCP3* || "$panelname" == *CP2* ]]; then
+    # cp2 and vcp3 panels use the same qc.RData (i.e. vcp3_qc.RDATA)
 	QC_file="vcp3_qc.RData";
 fi
 
@@ -128,7 +129,7 @@ echo "RDATA = " "$readcount_file_name"
 docker run -v /home/dnanexus:/home/dnanexus/ \
 	--rm  ${DOCKERIMAGENAME} \
 	exomeDepth.R \
-	'v1.3.1' \
+	'v1.4.0' \
 	/home/dnanexus/out/exomedepth_output/exomedepth_output/"$samplename"_output.pdf \
 	/home/dnanexus/in/subpanel_bed/"$subpanel_bed_name":"$subpanel_bed_prefix" \
 	/home/dnanexus/in/readcount_file/"$readcount_file_name" "$bam":"$samplename":0.01 $QC_file

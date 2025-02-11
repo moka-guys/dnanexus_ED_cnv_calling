@@ -1,9 +1,9 @@
 {
-  "name": "ED_cnv_calling_v1.3.1",
-  "title": "ED_cnv_calling_v1.3.1",
-  "summary": "v1.3.1 - Performs CNV calling using ExomeDepth",
+  "name": "ED_cnv_calling_v1.4.0",
+  "title": "ED_cnv_calling_v1.4.0",
+  "summary": "v1.4.0 - Performs CNV calling using ExomeDepth",
   "properties": {
-    "github release": "v1.3.1"
+    "github release": "v1.4.0"
   },
   "dxapi": "1.0.0",
   "inputSpec": [
@@ -12,6 +12,20 @@
       "label": "project_name",
       "help": "The project containing the bamfiles.",
       "class": "string"
+    },
+    {
+      "name": "bam_str",
+      "label": "bam_str",
+      "help": "str used to search bam files. e.g. 001 or markdup",
+      "class": "string",
+      "optional": false
+    },
+    {
+      "name": "samplename_str",
+      "label": "samplename_str",
+      "help": "str used to get sample basename. e.g. _R1_001.bam or _markdup.bam",
+      "class": "string",
+      "optional": false
     },
     {
       "name": "reference_genome",
