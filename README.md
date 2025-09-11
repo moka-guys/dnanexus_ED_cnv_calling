@@ -1,4 +1,4 @@
-# dnanexus_ED_cnv_analysis_v1.5.0
+# dnanexus_ED_cnv_analysis_v1.6.0
 Performs CNV calling using ExomeDepth.
 
 Exome depth is run in two stages. Firstly, read counts are calculated, before CNVs are called using the read counts. Read counts are calculated over the entire genome whereas the CNV calling can be performed using a subpanel.
@@ -19,6 +19,7 @@ For further details on the usage of the docker image please refer to https://git
 - Readcount file generated using https://github.com/moka-guys/dnanexus\_ED\_readcount_analysis
 - List of comma seperated pan numbers (Pan4127,Pan4129,Pan4130,Pan4049)
 - Test specific BED file
+- Optional: list of comma separated samples to run a specific sample or a list of samples only. Use the sample name before the Pan number (e.g. NGS629_01_xxxxxx_NA12878_U_VCP2R208ViaGP08,NGS629_02_xxxxxx_NA12878_U_VCP2R208ViaGP08)
 - reference genome file (hs37d5.fa.gz)
 - Bam string to download bam(s)
 - Sample string to get basename of sample
@@ -38,8 +39,7 @@ See CLI command below for an example of inputs.
 The app can be run from the dx CLI.  The example below shows the code used to run test samples through this app:
 
 ```bash
-dx run applet-GybZV0006bZFBzgf54KP7BKj -iproject_name=003_220103_exomeDepth_calling_test -ireadcount_file=project-G6jb1k807Xjj1J984K6kfP13:file-G6kg5q80gvvz37qZ4ZPbvZ8Q -ibamfile_pannumbers=Pan4127,Pan4129,Pan4130,Pan4049 -isubpanel_bed=project-ByfFPz00jy1fk6PjpZ95F27J:file-G6kZpqQ0jy1q1Zk94G3qbVyV -ireference_genome=project-ByfFPz00jy1fk6PjpZ95F27J:file-B6ZY7VG2J35Vfvpkj8y0KZ01 -ibam_str="markdup" -isample_str="_markdup.bam"
-```
+dx run applet-GybZV0006bZFBzgf54KP7BKj -iproject_name=003_220103_exomeDepth_calling_test -ireadcount_file=project-G6jb1k807Xjj1J984K6kfP13:file-G6kg5q80gvvz37qZ4ZPbvZ8Q -ibamfile_pannumbers=Pan4127,Pan4129,Pan4130,Pan4049 -isubpanel_bed=project-ByfFPz00jy1fk6PjpZ95F27J:file-G6kZpqQ0jy1q1Zk94G3qbVyV -ireference_genome=project-ByfFPz00jy1fk6PjpZ95F27J:file-B6ZY7VG2J35Vfvpkj8y0KZ01 -ibam_str="markdup" -isamplename_str="_markdup.bam" -iincluded_samples=NGS629_01_xxxxxx_NA12878_U_VCP2R208ViaGP08,NGS629_02_xxxxxx_NA12878_U_VCP2R208ViaGP08```
 # Debugging
 
 For debugging issues with the `docker` image it can be helpful to `ssh` into a 'held for debugging' job in DNA nexus and run the `docker` image in interactive mode:
