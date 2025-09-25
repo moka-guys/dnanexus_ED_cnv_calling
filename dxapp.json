@@ -1,9 +1,9 @@
 {
-  "name": "ED_cnv_calling_v1.5.0",
-  "title": "ED_cnv_calling_v1.5.0",
-  "summary": "v1.5.0 - Performs CNV calling using ExomeDepth",
+  "name": "ED_cnv_calling_v1.6.0",
+  "title": "ED_cnv_calling_v1.6.0",
+  "summary": "v1.6.0 - Performs CNV calling using ExomeDepth",
   "properties": {
-    "github release": "v1.5.0"
+    "github release": "v1.6.0"
   },
   "dxapi": "1.0.0",
   "inputSpec": [
@@ -68,6 +68,13 @@
       "class": "file",
       "patterns": ["*.bed"],
       "optional": false
+    },
+    {
+      "name": "included_samples",
+      "label": "included samples",
+      "class": "string",
+      "optional": true,
+      "help": "comma separated sample name(s) to be included"
     }
   ],
   "outputSpec": [
