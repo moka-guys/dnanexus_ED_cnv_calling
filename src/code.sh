@@ -16,7 +16,7 @@ readcount_file_name=$(dx describe --name "$readcount_file")
 subpanel_bed_prefix=$(echo "$subpanel_bed_name" | sed -r  's/^[^0-9]*(Pan[0-9]+).*/\1/')
 
 # Location of the ExomeDepth docker file
-docker_file_id=project-ByfFPz00jy1fk6PjpZ95F27J:file-J2gVVb005gg4By325qjqQQz6
+docker_file_id=project-J32193pK9yGfjP2GyZ94KZf4:file-J342zpXK9yGxz8zxBKygQq80
 
 #read the DNA Nexus api key as a variable
 API_KEY_wquotes=$(echo $DX_SECURITY_CONTEXT |  jq '.auth_token')
