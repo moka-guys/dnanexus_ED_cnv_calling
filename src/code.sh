@@ -16,7 +16,7 @@ readcount_file_name=$(dx describe --name "$readcount_file")
 subpanel_bed_prefix=$(echo "$subpanel_bed_name" | sed -r  's/^[^0-9]*(Pan[0-9]+).*/\1/')
 
 # Location of the ExomeDepth docker file
-docker_file_id=project-J32193pK9yGfjP2GyZ94KZf4:file-J342zpXK9yGxz8zxBKygQq80
+docker_file_id=project-ByfFPz00jy1fk6PjpZ95F27J:file-Gbjy9yj0JQXkKB8bfFz856V6
 
 #read the DNA Nexus api key as a variable
 API_KEY_wquotes=$(echo $DX_SECURITY_CONTEXT |  jq '.auth_token')
@@ -57,7 +57,7 @@ echo "All Pan numbers to be assessed using this BED file = " "$bamfile_pannumber
 mark-section "Check that there are bam files matching provided Pan numbers"
 
 # Create an array of all the Pan numbers from the bam files in the provided project
-readarray -t pans_from_bams < <(dx find data --name "*.bam" --project "$project_name" --folder /output --auth "$API_KEY" |  sed -n 's/^.*_\(Pan[0-9]*\)\_.*/\1/p' | sort | uniq)
+readarray -t pans_from_bams < <(dx find data --name "*.bam" --project "$project_name" --folder /output --auth "$API_KEY" |  sed -n 's/^.*-\(Pan[0-9]*\)\_.*/\1/p' | sort | uniq)
 
 mark-section "download bams files and indexes"
 # $bamfile_pannumbers is a comma seperated list of pannumbers that should be analysed together.
@@ -107,6 +107,12 @@ mark-section "Run CNV analysis using docker image"
 # docker run - mount the home directory as a share
 # Write log direct into output folder
 # Get read count for all samples
+
+# replace - with _ for downloaded bam/bai
+for f in /home/dnanexus/to_test/*.ba*; do
+  [ -f "$f" ] || continue
+  mv -- "$f" "${f//-/_}"
+done
 
 for bam in /home/dnanexus/to_test/*bam
 do
