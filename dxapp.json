@@ -1,9 +1,9 @@
 {
-  "name": "ED_cnv_calling_v1.6.1",
-  "title": "ED_cnv_calling_v1.6.1",
-  "summary": "v1.6.1 - Performs CNV calling using ExomeDepth",
+  "name": "ED_cnv_calling_v1.7.0",
+  "title": "ED_cnv_calling_v1.7.0",
+  "summary": "v1.7.0 - Performs CNV calling using ExomeDepth",
   "properties": {
-    "github release": "v1.6.1"
+    "github release": "v1.7.0"
   },
   "dxapi": "1.0.0",
   "inputSpec": [
@@ -105,7 +105,7 @@
   },
   "ignoreReuse": false,
   "regionalOptions": {
-    "aws:eu-west-2-g": {
+    "aws:us-east-1": {
       "systemRequirements": {
         "*": {
           "instanceType": "mem1_ssd1_v2_x4"
