@@ -125,9 +125,10 @@ if [[ "$panelname" == *VCP1* ]]; then
 	QC_file="vcp1_qc.RData";
 elif [[ "$panelname" == *VCP2* ]]; then
 	QC_file="vcp2_qc.RData";
-elif [[ "$panelname" == *VCP3* || "$panelname" == *CP2* ]]; then
-    # cp2 and vcp3 panels use the same qc.RData (i.e. vcp3_qc.RDATA)
+elif [[ "$panelname" == *VCP3* ]]; then
 	QC_file="vcp3_qc.RData";
+elif [[ "$panelname" == *CP2*  ]]; then
+	QC_file="cp2_qc.RData";
 fi
 
 #test
