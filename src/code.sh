@@ -1,5 +1,5 @@
 #!/bin/bash
-# exomedepth_cnv_analysis_v1.6.0
+# exomedepth_cnv_analysis_v1.7.0
 
 # The following line causes bash to exit at any point if there is any error
 # and to output each line as it is executed -- useful for debugging
@@ -137,7 +137,7 @@ echo "RDATA = " "$readcount_file_name"
 docker run -v /home/dnanexus:/home/dnanexus/ \
 	--rm  ${DOCKERIMAGENAME} \
 	exomeDepth.R \
-	'v1.6.0' \
+	'v1.7.0' \
 	/home/dnanexus/out/exomedepth_output/exomedepth_output/"$samplename"_output.pdf \
 	/home/dnanexus/in/subpanel_bed/"$subpanel_bed_name":"$subpanel_bed_prefix" \
 	/home/dnanexus/in/readcount_file/"$readcount_file_name" "$bam":"$samplename":0.01 $QC_file
