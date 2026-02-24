@@ -1,5 +1,5 @@
 #!/bin/bash
-# exomedepth_cnv_analysis_v1.6.0
+# exomedepth_cnv_analysis_v1.7.0
 
 # The following line causes bash to exit at any point if there is any error
 # and to output each line as it is executed -- useful for debugging
@@ -16,7 +16,7 @@ readcount_file_name=$(dx describe --name "$readcount_file")
 subpanel_bed_prefix=$(echo "$subpanel_bed_name" | sed -r  's/^[^0-9]*(Pan[0-9]+).*/\1/')
 
 # Location of the ExomeDepth docker file
-docker_file_id=project-J32193pK9yGfjP2GyZ94KZf4:file-J342zpXK9yGxz8zxBKygQq80
+docker_file_id=project-ByfFPz00jy1fk6PjpZ95F27J:file-J6664F80Bvz1G9y9VfQJbq1b
 
 #read the DNA Nexus api key as a variable
 API_KEY_wquotes=$(echo $DX_SECURITY_CONTEXT |  jq '.auth_token')
@@ -125,9 +125,10 @@ if [[ "$panelname" == *VCP1* ]]; then
 	QC_file="vcp1_qc.RData";
 elif [[ "$panelname" == *VCP2* ]]; then
 	QC_file="vcp2_qc.RData";
-elif [[ "$panelname" == *VCP3* || "$panelname" == *CP2* ]]; then
-    # cp2 and vcp3 panels use the same qc.RData (i.e. vcp3_qc.RDATA)
+elif [[ "$panelname" == *VCP3* ]]; then
 	QC_file="vcp3_qc.RData";
+elif [[ "$panelname" == *CP2*  ]]; then
+	QC_file="cp2_qc.RData";
 fi
 
 #test
@@ -136,7 +137,7 @@ echo "RDATA = " "$readcount_file_name"
 docker run -v /home/dnanexus:/home/dnanexus/ \
 	--rm  ${DOCKERIMAGENAME} \
 	exomeDepth.R \
-	'v1.6.0' \
+	'v1.7.0' \
 	/home/dnanexus/out/exomedepth_output/exomedepth_output/"$samplename"_output.pdf \
 	/home/dnanexus/in/subpanel_bed/"$subpanel_bed_name":"$subpanel_bed_prefix" \
 	/home/dnanexus/in/readcount_file/"$readcount_file_name" "$bam":"$samplename":0.01 $QC_file
