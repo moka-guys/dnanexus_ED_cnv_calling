@@ -1,9 +1,9 @@
 {
-  "name": "ED_cnv_calling_v1.7.0",
-  "title": "ED_cnv_calling_v1.7.0",
-  "summary": "v1.7.0 - Performs CNV calling using ExomeDepth",
+  "name": "ED_cnv_calling_v1.7.1",
+  "title": "ED_cnv_calling_v1.7.1",
+  "summary": "v1.7.1 - Performs CNV calling using ExomeDepth",
   "properties": {
-    "github release": "v1.7.0"
+    "github release": "v1.7.1"
   },
   "dxapi": "1.0.0",
   "inputSpec": [
@@ -39,11 +39,11 @@
           "name": "hs37d5.fa.gz",
           "value": {
             "$dnanexus_link": {
-              "project": "project-ByfFPz00jy1fk6PjpZ95F27J",
-              "id": "file-B6ZY7VG2J35Vfvpkj8y0KZ01"
+              "project": "project-J32193pK9yGfjP2GyZ94KZf4",
+              "id": "file-J341J2XK9yGXx01zgP9FYy8x"
             }
           },
-          "region": "aws:us-east-1"
+          "region": "aws:eu-west-2-g"
         }
       ]
     },
@@ -105,7 +105,7 @@
   },
   "ignoreReuse": false,
   "regionalOptions": {
-    "aws:us-east-1": {
+    "aws:eu-west-2-g": {
       "systemRequirements": {
         "*": {
           "instanceType": "mem1_ssd1_v2_x4"
